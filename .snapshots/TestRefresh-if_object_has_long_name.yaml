@@ -4,8 +4,8 @@ items:
   - metadata:
       creationTimestamp: null
       labels:
-        some-label-key: random-70-character-objKey-cmFuZG9tLTcwLWNoYXJhY3Rlci1uYW1lCci1uYW1lC
-      name: random-70-character-objKey-cmFuZG9tLTcwLWNoYXJhY3Rlci-some-s
+        some-label-key: random-70-character-objkey-cmfuzg9tltcwlwnoyxjhy3rlci1uyw1lcci1uyw1lc
+      name: random-70-character-objkey-cmfuzg9tltcwlwnoyxjhy3rlci-some-s
       namespace: some-namespace
       ownerReferences:
         - apiVersion: v1
@@ -17,13 +17,13 @@ items:
     spec:
       selector:
         matchLabels:
-          some-label-key: random-70-character-objKey-cmFuZG9tLTcwLWNoYXJhY3Rlci1uYW1lCci1uYW1lC
+          some-label-key: random-70-character-objkey-cmfuzg9tltcwlwnoyxjhy3rlci1uyw1lcci1uyw1lc
       strategy: {}
       template:
         metadata:
           creationTimestamp: null
           labels:
-            some-label-key: random-70-character-objKey-cmFuZG9tLTcwLWNoYXJhY3Rlci1uYW1lCci1uYW1lC
+            some-label-key: random-70-character-objkey-cmfuzg9tltcwlwnoyxjhy3rlci1uyw1lcci1uyw1lc
         spec:
           containers:
             - image: some-deployment:some-commit-sha
@@ -34,7 +34,7 @@ items:
       creationTimestamp: null
       labels:
         some-label-key: "1"
-      name: random-70-character-name-cmFuZG9tLTcwLWNoYXJhY3Rlci1uYW1lCci1uY
+      name: random-70-character-name-cmfuzg9tltcwlwnoyxjhy3rlci1uy-f8d9db6b
       namespace: some-namespace
       ownerReferences:
         - apiVersion: v1
