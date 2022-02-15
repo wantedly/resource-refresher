@@ -131,8 +131,9 @@ func TestRefresh(t *testing.T) {
 	for _, tc := range testcases {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
-			client := fake.NewFakeClientWithScheme(scheme, append(tc.initialState, parent)...)
-			ref := refresh.New(client, scheme)
+			initObjs := append(tc.initialState, parent)
+			fakeClient := fake.NewClientBuilder().WithScheme(scheme).WithRuntimeObjects(initObjs...).Build()
+			ref := refresh.New(fakeClient, scheme)
 
 			ctx := context.Background()
 
@@ -142,7 +143,7 @@ func TestRefresh(t *testing.T) {
 
 			{
 				dl := &appsv1.DeploymentList{}
-				if err := client.List(ctx, dl); err != nil {
+				if err := fakeClient.List(ctx, dl); err != nil {
 					t.Fatalf("%+v", err)
 				}
 				ut.SnapshotYaml(t, dl)
