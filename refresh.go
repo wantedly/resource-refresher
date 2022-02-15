@@ -12,6 +12,8 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	util "sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
+
+	"github.com/wantedly/resource-name-sanitizer"
 )
 
 // Builder is responsible for creating on Application
@@ -79,14 +81,12 @@ func (r refresher) Refresh(ctx context.Context, parent client.Object, list Objec
 		if existing, ok := existingObjs[objKey]; ok {
 			emptyObj.SetName(existing.GetName())
 		} else {
+			s := sanitizer.NewSubdomainLabelSafe()
 			if name := obj.GetName(); name != "" {
-				if 63 < len(name) {
-					name = name[:63]
-				}
-				emptyObj.SetName(name)
+				emptyObj.SetName(s.Sanitize(name))
 			} else {
 				name := createResourceName("%s-%s", objKey, parent.GetName())
-				emptyObj.SetName(name)
+				emptyObj.SetName(s.Sanitize(name))
 			}
 		}
 		if _, err := util.CreateOrUpdate(ctx, r.client, emptyObj, func() error {
