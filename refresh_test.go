@@ -119,8 +119,8 @@ func TestRefresh(t *testing.T) {
 			initialState: nil,
 			objectList: refresh.ObjectList{
 				Items: []client.Object{
-					ut.GenDeployment("random-70-character-name-cmFuZG9tLTcwLWNoYXJhY3Rlci1uYW1lCci1uYW1lC==", map[string]string{labelKey: "1"}),
-					ut.GenDeployment("", map[string]string{labelKey: "random-70-character-objKey-cmFuZG9tLTcwLWNoYXJhY3Rlci1uYW1lCci1uYW1lC"}),
+					ut.GenDeployment("random-70-character-name-cmfuzg9tltcwlwnoyxjhy3rlci1uyw1lcci1uyw1lc==", map[string]string{labelKey: "1"}),
+					ut.GenDeployment("", map[string]string{labelKey: "random-70-character-objkey-cmfuzg9tltcwlwnoyxjhy3rlci1uyw1lcci1uyw1lc"}),
 				},
 				GroupVersionKind: gvk,
 				Identity:         labelGetter,
