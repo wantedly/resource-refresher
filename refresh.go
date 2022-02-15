@@ -45,7 +45,7 @@ type Refresher interface {
 	// - is not present in list
 	//
 	// when return value from Identify of two objects are the same they are considered to be a same object
-	Refresh(ctx context.Context, parent util.Object, list ObjectList) error
+	Refresh(ctx context.Context, parent client.Object, list ObjectList) error
 }
 
 type refresher struct {
@@ -54,16 +54,16 @@ type refresher struct {
 }
 
 type ObjectList struct {
-	Items            []util.Object
+	Items            []client.Object
 	GroupVersionKind schema.GroupVersionKind
-	Identity         func(util.Object) (string, error)
+	Identity         func(client.Object) (string, error)
 }
 
 func New(client client.Client, scheme *runtime.Scheme) Refresher {
 	return &refresher{client, scheme}
 }
 
-func (r refresher) Refresh(ctx context.Context, parent util.Object, list ObjectList) error {
+func (r refresher) Refresh(ctx context.Context, parent client.Object, list ObjectList) error {
 	existingObjs, err := r.handleExisting(ctx, parent, list)
 	if err != nil {
 		return errors.WithStack(err)
@@ -74,7 +74,7 @@ func (r refresher) Refresh(ctx context.Context, parent util.Object, list ObjectL
 		if err != nil {
 			return errors.WithStack(err)
 		}
-		emptyObj := reflect.New(reflect.ValueOf(obj).Elem().Type()).Interface().(util.Object)
+		emptyObj := reflect.New(reflect.ValueOf(obj).Elem().Type()).Interface().(client.Object)
 		emptyObj.SetNamespace(parent.GetNamespace())
 		if existing, ok := existingObjs[objKey]; ok {
 			emptyObj.SetName(existing.GetName())
@@ -122,7 +122,7 @@ func (r refresher) Refresh(ctx context.Context, parent util.Object, list ObjectL
 // handleExisting is responsible for two things
 // - collect information about existing objects to be updated
 // - delete outdated objects
-func (r refresher) handleExisting(ctx context.Context, parent util.Object, list ObjectList) (map[string]unstructured.Unstructured, error) {
+func (r refresher) handleExisting(ctx context.Context, parent client.Object, list ObjectList) (map[string]unstructured.Unstructured, error) {
 	desiredIds := sets.String{}
 	for _, obj := range list.Items {
 		id, err := list.Identity(obj)
@@ -167,7 +167,7 @@ func (r refresher) handleExisting(ctx context.Context, parent util.Object, list 
 	return existingMap, nil
 }
 
-func (r refresher) ownedByParent(dependent util.Object, parent util.Object) bool {
+func (r refresher) ownedByParent(dependent client.Object, parent client.Object) bool {
 	parentGVK := parent.GetObjectKind().GroupVersionKind()
 	for _, ref := range dependent.GetOwnerReferences() {
 		if ref.Name != parent.GetName() {

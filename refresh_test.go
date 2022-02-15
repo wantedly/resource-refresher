@@ -8,6 +8,7 @@ import (
 	appsv1 "k8s.io/api/apps/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/client/apiutil"
 	"sigs.k8s.io/controller-runtime/pkg/client/fake"
 	util "sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
@@ -32,7 +33,7 @@ func TestRefresh(t *testing.T) {
 
 	parent := ut.GenService("some-svc")
 
-	setOwner := func(child util.Object) util.Object {
+	setOwner := func(child client.Object) client.Object {
 		if err := util.SetControllerReference(parent, child, scheme); err != nil {
 			t.Fatal(err)
 		}
@@ -40,7 +41,7 @@ func TestRefresh(t *testing.T) {
 	}
 	const labelKey = "some-label-key"
 
-	labelGetter := func(obj util.Object) (string, error) {
+	labelGetter := func(obj client.Object) (string, error) {
 		key, ok := obj.GetLabels()[labelKey]
 		if !ok {
 			return "", errors.Errorf("service doesn't have label %q", labelKey)
@@ -70,7 +71,7 @@ func TestRefresh(t *testing.T) {
 				ut.GenDeployment("deploy-1", map[string]string{labelKey: "1"}),
 			},
 			objectList: refresh.ObjectList{
-				Items: []util.Object{
+				Items: []client.Object{
 					ut.GenDeployment("", map[string]string{labelKey: "2"}),
 				},
 				GroupVersionKind: gvk,
@@ -84,7 +85,7 @@ func TestRefresh(t *testing.T) {
 				setOwner(ut.GenDeployment("deploy-1", map[string]string{labelKey: "1"})),
 			},
 			objectList: refresh.ObjectList{
-				Items: []util.Object{
+				Items: []client.Object{
 					ut.GenDeployment("", map[string]string{labelKey: "2"}),
 				},
 				GroupVersionKind: gvk,
@@ -101,7 +102,7 @@ func TestRefresh(t *testing.T) {
 				})),
 			},
 			objectList: refresh.ObjectList{
-				Items: []util.Object{
+				Items: []client.Object{
 					ut.GenDeployment("", map[string]string{labelKey: "2"}),
 					ut.GenDeployment("", map[string]string{
 						labelKey:                     "1", // because of this, deploy-1 will be updated
@@ -117,7 +118,7 @@ func TestRefresh(t *testing.T) {
 			explanation:  "Names longer than 63 characters will need to be trimmed.",
 			initialState: nil,
 			objectList: refresh.ObjectList{
-				Items: []util.Object{
+				Items: []client.Object{
 					ut.GenDeployment("random-70-character-name-cmFuZG9tLTcwLWNoYXJhY3Rlci1uYW1lCci1uYW1lC==", map[string]string{labelKey: "1"}),
 					ut.GenDeployment("", map[string]string{labelKey: "random-70-character-objKey-cmFuZG9tLTcwLWNoYXJhY3Rlci1uYW1lCci1uYW1lC"}),
 				},
@@ -130,8 +131,9 @@ func TestRefresh(t *testing.T) {
 	for _, tc := range testcases {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
-			client := fake.NewFakeClientWithScheme(scheme, append(tc.initialState, parent)...)
-			ref := refresh.New(client, scheme)
+			initObjs := append(tc.initialState, parent)
+			fakeClient := fake.NewClientBuilder().WithScheme(scheme).WithRuntimeObjects(initObjs...).Build()
+			ref := refresh.New(fakeClient, scheme)
 
 			ctx := context.Background()
 
@@ -141,7 +143,7 @@ func TestRefresh(t *testing.T) {
 
 			{
 				dl := &appsv1.DeploymentList{}
-				if err := client.List(ctx, dl); err != nil {
+				if err := fakeClient.List(ctx, dl); err != nil {
 					t.Fatalf("%+v", err)
 				}
 				ut.SnapshotYaml(t, dl)
