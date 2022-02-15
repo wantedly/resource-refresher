@@ -18,12 +18,12 @@ import (
 //
 // Builder
 // - collect information
-// - should not contain any logic regarging generating objects
+// - should not contain any logic regarding generating objects
 type Builder interface {
 	Build(ctx context.Context) (Lister, error)
 }
 
-// Lister is responsible of generating ObjectList for each resource
+// Lister is responsible for generating ObjectList for each resource
 //
 // Lister
 // - generate objects
@@ -40,7 +40,7 @@ type Refresher interface {
 	// - when it doesn't exist, it will be created
 	// - when the object exists, it will be updated
 	//
-	// Also an object that matches all of the conditions below will be deleted
+	// Also an object that matches all the conditions below will be deleted
 	// - owned by parent
 	// - is not present in list
 	//
@@ -119,7 +119,7 @@ func (r refresher) Refresh(ctx context.Context, parent util.Object, list ObjectL
 	return nil
 }
 
-// handleExisting is responsible of two things
+// handleExisting is responsible for two things
 // - collect information about existing objects to be updated
 // - delete outdated objects
 func (r refresher) handleExisting(ctx context.Context, parent util.Object, list ObjectList) (map[string]unstructured.Unstructured, error) {
