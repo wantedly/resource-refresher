@@ -239,6 +239,8 @@ github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stuart-warren/yamlfmt v0.1.2 h1:ojguhYdHpNWy62fLkrQtLFGAzrqFxVaU8f5Z0U8mkMI=
 github.com/stuart-warren/yamlfmt v0.1.2/go.mod h1:X5TuPH+hf4O0U1KBvNqygvHbvAnoi9Wyl9BbtPv8SZk=
+github.com/wantedly/resource-name-sanitizer v0.0.0-20211210090254-2558977bd7ef h1:CY3oLZo+4TqA06Z5V1ORJS9pWG+tUGKomwwjVQnO9b4=
+github.com/wantedly/resource-name-sanitizer v0.0.0-20211210090254-2558977bd7ef/go.mod h1:489R51g2vdMpWugfLm6ncruK4AL71J87anxjH7AimOs=
 github.com/yuin/goldmark v1.1.25/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
