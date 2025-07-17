@@ -13,7 +13,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	util "sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
-	"github.com/wantedly/resource-name-sanitizer"
+	sanitizer "github.com/wantedly/resource-name-sanitizer"
 )
 
 // Builder is responsible for creating on Application
