@@ -1,5 +1,4 @@
 ---
-apiVersion: apps/v1
 items:
   - metadata:
       creationTimestamp: null
@@ -62,6 +61,5 @@ items:
               name: some-deployment
               resources: {}
     status: {}
-kind: DeploymentList
 metadata: {}
 

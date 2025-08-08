@@ -1,5 +1,4 @@
 ---
-apiVersion: apps/v1
 items:
   - apiVersion: apps/v1
     kind: Deployment
@@ -54,6 +53,5 @@ items:
               name: some-deployment
               resources: {}
     status: {}
-kind: DeploymentList
 metadata: {}
 
